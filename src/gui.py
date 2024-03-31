@@ -59,6 +59,11 @@ class Camera:
         if not self.capture_paused:
             ret, frame = self.cap.read()
             if ret:
+                # modify text overlay 
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                text_position = (int(frame.shape[1] * 0.01), int(frame.shape[0] * 0.1))
+                cv2.putText(frame, "camera", text_position, font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                
                 cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(cv2image)
                 imgtk = ImageTk.PhotoImage(image=img)
