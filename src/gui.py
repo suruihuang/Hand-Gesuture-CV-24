@@ -49,6 +49,7 @@ class Camera:
         self.add_toolbar_button(toolbar, "Start Camera", self.start_camera)
         self.add_toolbar_button(toolbar, "Pause/Continue Camera", self.pause_camera)
         self.add_toolbar_button(toolbar, "Exit", self.stop_camera)
+        self.add_toolbar_button(toolbar, "ASL Chart", self.open_chart)
         
     def add_toolbar_button(self, parent, button_name, command):
         button = ttk.Button(parent, text=button_name, command=command)
@@ -84,6 +85,18 @@ class Camera:
             self.cap.release()
         self.root.quit()
 
+    # open a side window with an chart showing the ASL alphabet
+    # image source: https://www.nidcd.nih.gov/sites/default/files/Content%20Images/NIDCD-ASL-hands-2014.jpg
+    def open_chart(self):
+        chart_window = tk.Toplevel(self.root)
+        chart_window.title("ASL Chart")
+        chart_window.geometry("290x467")
+        chart_window.geometry("+{}+{}".format(self.root.winfo_screenwidth()//2 + 100, 150))
+        image = ImageTk.PhotoImage(Image.open("ASL_chart.jpg"))
+        label = tk.Label(chart_window, image=image)
+        label.image = image
+        label.pack()
+        
 if __name__ == "__main__":
     root = tk.Tk()
     app = Camera(root)
