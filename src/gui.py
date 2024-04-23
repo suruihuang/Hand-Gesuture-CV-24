@@ -27,6 +27,10 @@ class Camera:
         self.camera_label = tk.Label(self.root)
         self.camera_label.pack(fill="both",expand=True)
         
+        # display overlay frame
+        self.side_label = tk.Label(self.root)
+        self.side_label.pack(fill="both",expand=True)
+        
         # menu bar for operations 
         #self.set_menu_bar()
 
@@ -74,8 +78,20 @@ class Camera:
                 self.camera_label.imgtk = imgtk
                 self.camera_label.configure(image=imgtk)
                 
+                # resize image 
+                w,h =(224, 224)
+                center = cv2image.shape
+                x = center[1]/2 - w/2
+                y = center[0]/2 - h/2
+
+                crop_img = cv2image[int(y):int(y+h), int(x):int(x+w)]
                 
-                prediction = model.predict(img)
+                resize_image = cv2.resize(crop_img, (224,224),  interpolation = cv2.INTER_LINEAR)
+                resize_image = Image.fromarray(resize_image)
+                resize_image_tk = ImageTk.PhotoImage(image=resize_image)
+                self.side_label.imgtk =  resize_image_tk
+                self.side_label.configure(image=resize_image_tk)
+                prediction = model.predict(resize_image)
                 prediction_label.config(text=str(prediction))
         self.camera_label.after(10, self.update_frame)
     
