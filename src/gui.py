@@ -3,6 +3,9 @@ from tkinter import ttk
 import cv2
 import threading
 from PIL import Image, ImageTk
+from cnn_model import CNN
+from connect_model import ConnectModel
+
 
 class Camera:
     def __init__(self, root) -> None:
@@ -70,6 +73,10 @@ class Camera:
                 imgtk = ImageTk.PhotoImage(image=img)
                 self.camera_label.imgtk = imgtk
                 self.camera_label.configure(image=imgtk)
+                
+                
+                prediction = model.predict(img)
+                prediction_label.config(text=str(prediction))
         self.camera_label.after(10, self.update_frame)
     
     def pause_camera(self):
@@ -92,12 +99,22 @@ class Camera:
         chart_window.title("ASL Chart")
         chart_window.geometry("290x467")
         chart_window.geometry("+{}+{}".format(self.root.winfo_screenwidth()//2 + 100, 150))
-        image = ImageTk.PhotoImage(Image.open("ASL_chart.jpg"))
+        image = ImageTk.PhotoImage(Image.open("src\ASL_chart.jpg"))
         label = tk.Label(chart_window, image=image)
         label.image = image
         label.pack()
         
 if __name__ == "__main__":
+    model = ConnectModel(r'output\new_model.pth')
+    
+    
+    
+    # start main gui 
     root = tk.Tk()
+    
+    prediction_label = tk.Label(root, text="Prediction will appear here", font=('Helvetica', 16))
+    prediction_label.pack(pady=20)
     app = Camera(root)
     root.mainloop()
+    
+    

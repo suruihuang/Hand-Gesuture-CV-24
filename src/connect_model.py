@@ -1,6 +1,10 @@
 import torch
 from torchvision import datasets, transforms, models 
 from PIL import Image
+# from cnn_model import CNN
+
+asl_classes = ['N', 'D', 'P', 'space', 'Z', 'nothing', 'W', 'I', 'C', 'del', 'Y', 'S', 'G', 'M', 'J', 'T', 'V', 'B', 'H', 'E', 'O', 'Q', 'K', 'A', 'U', 'R', 'X', 'L', 'F']
+
 
 class ConnectModel:
     # load model given path
@@ -9,7 +13,7 @@ class ConnectModel:
         self.model.eval()
         self.transform = transforms.Compose([
             transforms.Resize(224),
-            #transforms.CenterCrop(224),
+            transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], 
                                 std=[0.229, 0.224, 0.225])
@@ -21,7 +25,18 @@ class ConnectModel:
         return self.transform(frame)
     
     def predict(self, frame):
-        input_tensor = self.preprocess(frame)
+        input_tensor = self.process(frame)
         with torch.no_grad():
             prediction = self.model(input_tensor)
-        return prediction
+            probabilities = torch.nn.functional.softmax(prediction, dim=1)
+            # _, predicted_index = torch.max(probabilities, 1)
+            # predicted_label = asl_classes[predicted_index.item()]
+            top_probs, top_idxs = torch.topk(probabilities, 3)
+            top_probs = top_probs.numpy().flatten() *100
+            top_idxs = top_idxs.numpy().flatten()
+            top_classes = [asl_classes[idx] for idx in top_idxs]
+        return list(zip(top_classes, top_probs))
+
+        return predicted_label
+
+model = ConnectModel(r'output\new_model.pth')
