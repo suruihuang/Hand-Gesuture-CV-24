@@ -5,12 +5,14 @@ import threading
 from PIL import Image, ImageTk
 from cnn_model import CNN
 from connect_model import ConnectModel
-
+from landmark_stream import draw_landmarks_on_image
+from landmark_stream import Landmarker
 
 class Camera:
     def __init__(self, root) -> None:
         self.root = root
         self.root.title("Hand Gesture GUI")
+        self.hand_landmarker = Landmarker()
         
         # setup gui size 
         self.root.geometry("{}x{}".format(self.root.winfo_screenwidth() //2,
@@ -22,6 +24,7 @@ class Camera:
         # for video capture 
         self.cap = cv2.VideoCapture(0)
         self.capture_paused = False
+        self.show_landmarking = False
 
         # display the captured frame 
         self.camera_label = tk.Label(self.root)
@@ -44,7 +47,7 @@ class Camera:
         menu_list = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label = "Operation", menu=menu_list)
         
-        menu_list.add_command(label = "Sart Camera", command=self.start_camera)
+        menu_list.add_command(label = "Start Camera", command=self.start_camera)
         menu_list.add_separator()
         menu_list.add_command(label="Exit", command=self.stop_camera)
         
@@ -54,6 +57,7 @@ class Camera:
         
         # add button on toolbar 
         self.add_toolbar_button(toolbar, "Start Camera", self.start_camera)
+        self.add_toolbar_button(toolbar, "Show Landmarking", self.show_landmarks)
         self.add_toolbar_button(toolbar, "Pause/Continue Camera", self.pause_camera)
         self.add_toolbar_button(toolbar, "Exit", self.stop_camera)
         self.add_toolbar_button(toolbar, "ASL Chart", self.open_chart)
@@ -71,6 +75,10 @@ class Camera:
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 text_position = (int(frame.shape[1] * 0.01), int(frame.shape[0] * 0.1))
                 cv2.putText(frame, "camera", text_position, font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+                if(self.show_landmarking):
+                   self.hand_landmarker.detect_async(frame)
+                   frame = draw_landmarks_on_image(frame, self.hand_landmarker.result)
                 
                 cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(cv2image)
@@ -98,6 +106,9 @@ class Camera:
     def pause_camera(self):
         self.capture_paused = not self.capture_paused
 
+    def show_landmarks(self):
+        self.show_landmarking = not self.show_landmarking
+
     # start the camera in a different thread 
     def start_camera(self):
         #self.pause_camera = False
@@ -122,8 +133,6 @@ class Camera:
         
 if __name__ == "__main__":
     model = ConnectModel(r'output\new_model.pth')
-    
-    
     
     # start main gui 
     root = tk.Tk()
