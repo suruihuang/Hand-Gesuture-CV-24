@@ -132,7 +132,7 @@ class Camera:
         label.pack()
         
 if __name__ == "__main__":
-    model = ConnectModel(r'output\new_model.pth')
+    model = ConnectModel(r'output\landmark_model.pth')
     
     # start main gui 
     root = tk.Tk()

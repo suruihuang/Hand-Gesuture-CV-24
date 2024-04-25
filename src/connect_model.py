@@ -3,7 +3,7 @@ from torchvision import datasets, transforms, models
 from PIL import Image
 # from cnn_model import CNN
 
-asl_classes = ['N', 'D', 'P', 'space', 'Z', 'nothing', 'W', 'I', 'C', 'del', 'Y', 'S', 'G', 'M', 'J', 'T', 'V', 'B', 'H', 'E', 'O', 'Q', 'K', 'A', 'U', 'R', 'X', 'L', 'F']
+asl_classes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'del', 'nothing', 'space']
 
 
 class ConnectModel:

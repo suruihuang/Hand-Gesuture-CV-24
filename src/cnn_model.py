@@ -12,17 +12,17 @@ from sklearn.metrics import classification_report
 from PIL import Image
 
 
-asl_classes = ['N', 'D', 'P', 'space', 'Z', 'nothing', 'W', 'I', 'C', 'del', 'Y', 'S', 'G', 'M', 'J', 'T', 'V', 'B', 'H', 'E', 'O', 'Q', 'K', 'A', 'U', 'R', 'X', 'L', 'F']
+asl_classes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'del', 'nothing', 'space']
 
 class CNN(LightningModule):
     def __init__(self):
         super(CNN, self).__init__()
         # RGB image with 3 channels, output 6 channels with 3x3 kernel 
         self.conv1 = nn.Conv2d(in_channels=3,out_channels=6,kernel_size=3)
-        self.conv2 = nn.Conv2d(in_channels=6,out_channels=12,kernel_size=3)
+        self.conv2 = nn.Conv2d(in_channels=6,out_channels=16,kernel_size=3)
         
         # set up first fully connected layers, outchanel * image size 
-        self.fc1 = nn.Linear(in_features=12*54*54, out_features=120)
+        self.fc1 = nn.Linear(in_features=16*54*54, out_features=120)
         self.fc2 = nn.Linear(in_features=120, out_features=84)
         self.fc3 = nn.Linear(in_features=84, out_features=20)
         self.fc4 = nn.Linear(in_features=20, out_features= len(asl_classes))
@@ -37,7 +37,7 @@ class CNN(LightningModule):
         x = F.max_pool2d(x, 2, 2)
         
         # flatten
-        x = x.view(-1, 12*54*54)
+        x = x.view(-1, 16*54*54)
         
         # activation
         x = F.relu(self.fc1(x))
