@@ -124,8 +124,8 @@ class Camera:
     def open_chart(self):
         chart_window = tk.Toplevel(self.root)
         chart_window.title("ASL Chart")
-        chart_window.geometry("290x467")
-        chart_window.geometry("+{}+{}".format(self.root.winfo_screenwidth()//2 + 100, 150))
+        chart_window.geometry("427x720")
+        chart_window.geometry("+{}+{}".format(self.root.winfo_screenwidth()//2 + 100, 0))
         image = ImageTk.PhotoImage(Image.open("src\ASL_chart.jpg"))
         label = tk.Label(chart_window, image=image)
         label.image = image
