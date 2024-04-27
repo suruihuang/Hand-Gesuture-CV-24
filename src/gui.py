@@ -3,7 +3,7 @@ from tkinter import ttk
 import cv2
 import threading
 from PIL import Image, ImageTk
-from cnn_model import CNN
+from fivelayercnn import CNN
 from connect_model import ConnectModel
 from landmark_stream import draw_landmarks_on_image
 from landmark_stream import Landmarker
@@ -100,8 +100,15 @@ class Camera:
                 self.side_label.imgtk =  resize_image_tk
                 self.side_label.configure(image=resize_image_tk)
                 prediction = model.predict(resize_image)
-                prediction_label.config(text=str(prediction))
-        self.camera_label.after(10, self.update_frame)
+                
+                # Format the prediction to two decimal places
+                formatted_prediction = ["{}: {:.2f}% \n".format(pred[0], pred[1]) for pred in prediction]
+                
+                # Create a fixed position text for each label
+                fixed_position_text = " ".join(formatted_prediction)
+                prediction_label.config(text=fixed_position_text)
+                #prediction_label.config(text=str(prediction))
+        self.camera_label.after(100, self.update_frame)
     
     def pause_camera(self):
         self.capture_paused = not self.capture_paused
@@ -132,7 +139,7 @@ class Camera:
         label.pack()
         
 if __name__ == "__main__":
-    model = ConnectModel(r'output\landmark_model.pth')
+    model = ConnectModel(r'output\landmark_model_5_modifiedlayers.pth')
     
     # start main gui 
     root = tk.Tk()
