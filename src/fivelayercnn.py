@@ -38,22 +38,22 @@ class CNN(LightningModule):
         # apply first convolutin layer by ReLu
         x = F.relu(self.conv1(x))
         x = F.max_pool2d(x, 2, 2)
-        x = F.dropout(x)
+        #x = F.dropout(x)
         
         # second convltn. layer
         x = F.relu(self.conv2(x))
         x = F.max_pool2d(x, 2, 2)
-        x = F.dropout(x)
+        #x = F.dropout(x)
         
         # third layer 
         x = F.relu(self.conv3(x))
         x = F.max_pool2d(x, 2, 2)
-        x = F.dropout(x)
+        #x = F.dropout(x)
         
          # fourth layer 
         x = F.relu(self.conv4(x))
         x = F.max_pool2d(x, 2, 2)
-        x = F.dropout(x)
+        #x = F.dropout(x)
         
         # fifth layer 
         x = F.relu(self.conv5(x))

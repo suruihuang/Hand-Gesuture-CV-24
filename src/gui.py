@@ -139,7 +139,7 @@ class Camera:
         label.pack()
         
 if __name__ == "__main__":
-    model = ConnectModel(r'output\landmark_model_5_modifiedlayers.pth')
+    model = ConnectModel(r'output\landmark_model_5_modifiedlayers2.pth')
     
     # start main gui 
     root = tk.Tk()
