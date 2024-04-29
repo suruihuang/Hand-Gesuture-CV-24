@@ -39,4 +39,4 @@ class ConnectModel:
 
         return predicted_label
 
-model = ConnectModel(r'output\new_model.pth')
+# model = ConnectModel(r'output\new_model.pth')

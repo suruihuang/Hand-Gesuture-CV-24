@@ -1,0 +1,10 @@
+matplotlib==3.8.3
+mediapipe==0.10.11
+numpy==1.22.0
+opencv_python==4.6.0.66
+Pillow==10.3.0
+pytorch_lightning==2.2.2
+scikit_learn==1.4.2
+skimage==0.0
+torch==2.2.2
+torchvision==0.17.2
